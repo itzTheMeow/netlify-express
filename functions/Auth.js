@@ -26,7 +26,7 @@ let OnLogin = function () {
       if (!syscfg) return;
 
       (JSON.parse(syscfg) || []).forEach((p) => {
-        InstallProgram(p);
+        InstallProgram(p, true);
       });
     },
     error: function (request, status, error) {

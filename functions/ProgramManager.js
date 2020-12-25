@@ -4,7 +4,27 @@ let GetProgram = function (program) {
   return MeowOS.ProgramList[(program || "").toLowerCase()] || {};
 };
 
-let InstallProgram = function (p) {
+let SavePrograms = function () {
+  $.ajax({
+    type: "POST",
+    url: `${MeowOS.APIURL}fs/writeFile`,
+    data: {
+      path: "/system/installed.syscfg",
+      token: Auth.token,
+      content: JSON.stringify(Object.keys(MeowOS.ProgramList)),
+    },
+    error: function (request, status, error) {
+      if (MeowOS.error) return;
+
+      MeowOS.ErrorHandler(
+        "PROGRAM MANAGER",
+        `Failed to load ${prog} due to: ${AjaxErrorMsg(request, status, error)}`,
+        true
+      );
+    },
+  });
+};
+let InstallProgram = function (p, startupInstall) {
   if (MeowOS.error) return;
 
   MeowOS.log("i", "PROGRAM MANAGER", `Loading '${p}'...`);
@@ -29,6 +49,8 @@ let InstallProgram = function (p) {
 
       let js = program.script;
       eval(js);
+
+      if (!startupInstall) SavePrograms();
 
       MeowOS.log("S", "PROGRAM MANAGER", `Loaded '${p}'`);
     },
@@ -109,23 +131,4 @@ SetPrograms = function () {
 
       _("taskbar-menu").appendChild(progBox);
     });
-
-  $.ajax({
-    type: "POST",
-    url: `${MeowOS.APIURL}fs/writeFile`,
-    data: {
-      path: "/system/installed.syscfg",
-      token: Auth.token,
-      content: JSON.stringify(Object.keys(MeowOS.ProgramList)),
-    },
-    error: function (request, status, error) {
-      if (MeowOS.error) return;
-
-      MeowOS.ErrorHandler(
-        "PROGRAM MANAGER",
-        `Failed to load ${prog} due to: ${AjaxErrorMsg(request, status, error)}`,
-        true
-      );
-    },
-  });
 };
