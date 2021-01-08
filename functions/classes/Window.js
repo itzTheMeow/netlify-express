@@ -97,7 +97,7 @@ let Window = function (title, program, pass) {
   let _this = this;
   this.sizeInterval = setInterval(function () {
     // Sets the height of the window content to the size of the window (minus title bar)
-    _this.content.style.height = _this.window.offsetHeight - 20 + "px";
+    _this.content.style.height = _this.window.offsetHeight - _this.titleElement.offsetHeight + "px";
   });
 
   try {
