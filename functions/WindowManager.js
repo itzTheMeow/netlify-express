@@ -106,7 +106,7 @@ SaveWindows = function () {
 
   let windows = [];
   MeowOS.WINDOWS.forEach((w) => {
-    if (window.program.hidden) return;
+    if (w.program.hidden) return;
     windows.push({
       left: w.window.style.left,
       top: w.window.style.top,
