@@ -50,6 +50,7 @@ let Window = function (title, program, pass) {
   let taskbarIcon = document.createElement("div");
   taskbarIcon.className = "taskbar-item";
   taskbarIcon.setAttribute("for-window", this.id);
+
   let taskbarIconImage = document.createElement("img");
   taskbarIconImage.className = "taskbar-item-image";
   taskbarIconImage.src = this.program.icon || "";
